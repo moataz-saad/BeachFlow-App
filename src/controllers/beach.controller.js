@@ -1,6 +1,5 @@
 
 const { Beach, User, Booking,Notification } = require("../models/index");
-// const Notification = require('../models/notification.model');
 const  {Op}  = require("sequelize");
 
 // 1. جلب كل الشواطئ
@@ -31,13 +30,13 @@ exports.addBeach = async (req, res, next) => {
         const newBeach = await Beach.create({
             name, location, price, description, imageUrl,maxCapacity,
             availableCapacity: maxCapacity,
-            adminId: req.user.id // ربط أوتوماتيكي بالأدمن
+            adminId: req.user.id 
         });
 await Notification.create({
     title:'تم إضافة شاطئ جديد! 🏖️',
-    message: `تم إضافة شاطئ "${name}" في "${location}". احجز مكانك الآن!`, // استخدم المتغيرات مباشرة
+    message: `تم إضافة شاطئ "${name}" في "${location}". احجز مكانك الآن!`, 
     type: 'beach_added',
-    userId: null // لازم تكون null صريحة طالما الجدول بيقبلها للإشعارات العامة
+    userId: null 
 });
         res.status(201).json({ message: "تم إضافة الشاطئ بنجاح", beach: newBeach });
     } catch (error) {
@@ -45,30 +44,30 @@ await Notification.create({
     }
 };
 
-// 4. البحث
+
 // 4. البحث عن شاطئ (Search)
 exports.getSearch = async (req, res, next) => {
   try {
-    let { q } = req.query; // الكلمة المراد البحث عنها
+    let { q } = req.query; 
     
     if (!q) {
       return res.status(400).json({ message: "برجاء إدخال كلمة للبحث" });
     }
 
-    q = q.trim(); // مسح المسافات الزائدة
+    q = q.trim(); 
 
     const beaches = await Beach.findAll({
   where: {
     [Op.or]: [
-      { name: { [Op.iLike]: `%${q}%` } },     // ارجع استخدم iLike هنا
-      { location: { [Op.iLike]: `%${q}%` } }  // iLike بتخلي البحث مرن أكتر
+      { name: { [Op.iLike]: `%${q}%` } },     
+      { location: { [Op.iLike]: `%${q}%` } }  
     ]
   }
 });
 
     res.status(200).json(beaches);
   } catch (error) {
-    console.error("SQL Search Error:", error); // عشان يطبع لنا تفاصيل الخطأ في التيرمينال
+    console.error("SQL Search Error:", error); 
     next(error);
   }
 };
@@ -96,9 +95,9 @@ exports.updateBeach = async (req, res, next) => {
         await beach.update({ name, location, price, description, imageUrl });
 await Notification.create({
     title: 'تم تعديل بيانات شاطئك!🏖️',
-    message: `تم إضافة شاطئ "${name}" في "${location}". احجز مكانك الآن!`, // استخدم المتغيرات مباشرة
+    message: `تم إضافة شاطئ "${name}" في "${location}". احجز مكانك الآن!`, 
     type: 'beach_added',
-    userId: null // لازم تكون null صريحة طالما الجدول بيقبلها للإشعارات العامة
+    userId: null 
 });
         res.status(200).json({ message: "تم التحديث بنجاح", beach });
     } catch (error) {
@@ -121,9 +120,7 @@ exports.deleteBeach = async (req, res, next) => {
 exports.getTopRatedBeaches = async (req, res, next) => {
     try {
         const topBeaches = await Beach.findAll({
-            // ترتيب تنازلي حسب التقييم
             order: [['rating', 'DESC']], 
-            // ممكن نحدد عدد معين يظهر (أول 5 شواطئ مثلاً)
             limit: 6
         });
 

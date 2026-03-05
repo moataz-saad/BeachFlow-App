@@ -3,17 +3,16 @@ const { Op } = require('sequelize');
 
 exports.getUserNotifications = async (req, res) => {
     try {
-        // req.user.id بييجي من الـ Auth Middleware (التوكن)
-        const userId = req.user.id; 
 
+        const userId = req.user.id; 
         const notifications = await Notification.findAll({
             where: {
                 [Op.or]: [
-                    { userId: userId }, // إشعاراتي أنا بس
-                    { userId: null }    // إشعارات عامة (زي إضافة شاطئ جديد)
+                    { userId: userId },
+                    { userId: null }    
                 ]
             },
-            order: [['createdAt', 'DESC']] // الأحدث يظهر فوق
+            order: [['createdAt', 'DESC']] 
         });
 
         res.status(200).json(notifications);

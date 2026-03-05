@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const {sequelize} = require('../config/db');// تأكد من مسار قاعدة البيانات
+const {sequelize} = require('../config/db');
 
 const Favorite = sequelize.define('Favorite', {
     id: {
@@ -7,7 +7,7 @@ const Favorite = sequelize.define('Favorite', {
         primaryKey: true,
         autoIncrement: true
     }
-    // الـ userId والـ beachId هيتحطوا أوتوماتيك من الـ Associations
+    
 });
 
 module.exports = Favorite;

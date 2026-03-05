@@ -3,28 +3,23 @@ const { Booking, Beach,Notification } = require('../models/index');
 exports.createBooking = async (req, res, next) => {
     try {
         const { beachId, bookingDate, totalPrice } = req.body;
-
-        // 1. نجيب بيانات الشاطئ وسعته القصوى
         const beach = await Beach.findByPk(beachId);
         if (!beach) return res.status(404).json({ message: "الشاطئ غير موجود" });
-
-        // 2. نحسب عدد الحجوزات المؤكدة في التاريخ المختار لهذا الشاطئ
         const confirmedBookingsCount = await Booking.count({
             where: {
                 beachId: beachId,
-                bookingDate: bookingDate, // التاريخ اللي اليوزر اختاره من Flutter
+                bookingDate: bookingDate, 
                 status: 'confirmed'
             }
         });
-        // بعد نجاح إنشاء الحجز وتأكيده
+
         await Notification.create({
-            userId: req.user.id, // الإشعار لليوزر ده بس
+            userId: req.user.id, 
             title: "تم تأكيد حجزك ✅",
             message: `حجزك في شاطئ ${beach.name} بتاريخ ${bookingDate} أصبح مؤكداً. استمتع بيومك!`,
             type: 'booking_confirmed'
         });
 
-        // 3. نتحقق هل فيه مكان فاضي؟
         const availableSlots = beach.maxCapacity - confirmedBookingsCount;
 
         if (availableSlots <= 0) {
@@ -33,7 +28,6 @@ exports.createBooking = async (req, res, next) => {
             });
         }
 
-        // 4. إنشاء الحجز إذا كان متاحاً
         const newBooking = await Booking.create({
             beachId,
             userId: req.user.id,

@@ -4,8 +4,6 @@ const { Booking, Beach, User } = require("../models/index");
 exports.initiatePayment = async (req, res, next) => {
     try {
         const { bookingId } = req.body;
-
-        // 1. جلب بيانات الحجز (بفضل العلاقات اللي عملناها)
         const booking = await Booking.findByPk(bookingId, {
             include: [
                 { model: Beach, as: 'beach' },
@@ -14,8 +12,6 @@ exports.initiatePayment = async (req, res, next) => {
         });
 
         if (!booking) return res.status(404).json({ message: "الحجز غير موجود" });
-
-        // --- الخطوة 1: الحصول على الـ Authentication Token ---
         const authResponse = await axios.post('https://egypt.paymob.com/api/auth/tokens', {
             api_key: process.env.PAYMOB_API_KEY
         });
@@ -25,9 +21,9 @@ exports.initiatePayment = async (req, res, next) => {
         const orderResponse = await axios.post('https://egypt.paymob.com/api/ecommerce/orders', {
             auth_token: token,
             delivery_needed: "false",
-            amount_cents: booking.totalPrice * 100, // بيموب بيتعامل بالقروش
+            amount_cents: booking.totalPrice * 100, 
             currency: "EGP",
-            items: [] // ممكن تضيف فيها اسم الشاطئ لو حابب
+            items: [] 
         });
         const orderId = orderResponse.data.id;
 
@@ -41,7 +37,7 @@ exports.initiatePayment = async (req, res, next) => {
                 first_name: booking.user.name.split(' ')[0] || "Guest",
                 last_name: booking.user.name.split(' ')[1] || "User",
                 email: booking.user.email,
-                phone_number: "01000000000", // يفضل تخلي اليوزر يدخله في الحقيقة
+                phone_number: "01000000000", 
                 currency: "EGP",
                 street: "NA",
                 building: "NA",

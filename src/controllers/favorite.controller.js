@@ -1,6 +1,6 @@
 const { Favorite, Beach } = require('../models/index');
 
-// 1. إضافة أو إزالة من المفضلات (Toggle)
+
 exports.toggleFavorite = async (req, res, next) => {
     try {
         const { beachId } = req.body;

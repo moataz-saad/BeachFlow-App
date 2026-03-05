@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendOTPEmail = require("../utils/sendOTPEmail");
 
-// تأكد من كلمة exports. واسم الوظيفة
 
 exports.register = async (req, res, next) => {
   try {
@@ -27,7 +26,6 @@ exports.login = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-// ضيف دي كمان عشان لو الروتس محتاجاها
 exports.verifyOTP = async (req, res, next) => {
     try {
         const { email, otp } = req.body;
