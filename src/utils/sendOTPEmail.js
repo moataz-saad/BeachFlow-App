@@ -1,65 +1,46 @@
 const nodemailer = require("nodemailer");
+
 const sendOTPEmail = async (email, otp) => {
   try {
-    const emailPass = process.env.EMAIL_PASS ? process.env.EMAIL_PASS.replace(/\s/g, "") : "";
+    const userEmail = process.env.EMAIL_USER;
+    const userPass = process.env.EMAIL_PASS;
+
+    if (!userEmail || !userPass) {
+      console.error("❌ ERROR: EMAIL_USER or EMAIL_PASS is not defined in Railway Variables!");
+      return; 
+    }
+
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465, 
-      secure: true, 
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS?.replace(/\s/g, "") || "", 
+        user: userEmail,
+        pass: userPass.replace(/\s/g, ""),
       },
     });
 
     const mailOptions = {
-      from: `"Beach Flow" <${process.env.EMAIL_USER}>`,
+      from: `"Beach Flow" <${userEmail}>`,
       to: email,
       subject: "Verification Code",
       text: `Your OTP is: ${otp}`,
-      html: `<b>Your verification code is: ${otp}</b>`, // يفضل إضافة HTML برضه
+      html: `
+        <div style="font-family: Arial, sans-serif; text-align: center;">
+          <h2>Welcome to Beach Flow</h2>
+          <p>Your verification code is:</p>
+          <h1 style="color: #007bff;">${otp}</h1>
+          <p>This code will expire shortly.</p>
+        </div>
+      `,
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Email Sent: " + info.response);
-  } 
-  catch (error) {
-    console.error("❌ Nodemailer Details:", error.message);
-    throw error; 
+    console.log("✅ Email Sent successfully: " + info.response);
+  } catch (error) {
+    console.error("❌ Nodemailer Error Detail:", error.message);
   }
 };
 
 module.exports = sendOTPEmail;
 
-
-
-
-
-// const sendOTPEmail = async (email, otp) => {
-//   try {
-//     const transporter = nodemailer.createTransport({
-//       host: "smtp.gmail.com",
-//       port: 465, // منفذ Gmail الآمن
-//       secure: true, 
-//       auth: {
-//         user: process.env.EMAIL_USER,
-//         pass: process.env.EMAIL_PASS.replace(/\s/g, ""), // بيمسح أي مسافات أوتوماتيك لو نسيت
-//       },
-//     });
-
-//     const mailOptions = {
-//       from: `"Beach Flow" <${process.env.EMAIL_USER}>`,
-//       to: email,
-//       subject: "Verification Code",
-//       text: `Your OTP is: ${otp}`,
-//     };
-
-//     const info = await transporter.sendMail(mailOptions);
-//     console.log("✅ Email Sent: " + info.response);
-//   } catch (error) {
-//     console.error("❌ Nodemailer Details:", error.message);
-//     throw error; // بنرمي الخطأ عشان الـ Controller يحس بيه
-//   }
-// };
-
-// module.exports = sendOTPEmail;
