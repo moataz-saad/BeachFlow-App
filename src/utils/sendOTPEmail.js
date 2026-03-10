@@ -11,14 +11,19 @@ const sendOTPEmail = async (email, otp) => {
     }
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: userEmail,
-        pass: userPass.replace(/\s/g, ""),
-      },
-    });
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: userEmail,
+    pass: userPass.replace(/\s/g, ""),
+  },
+  connectionTimeout: 10000, 
+  greetingTimeout: 5000,
+  socketTimeout: 10000,
+  dnsTimeout: 5000,
+  family: 4 
+});
 
     const mailOptions = {
       from: `"Beach Flow" <${userEmail}>`,
