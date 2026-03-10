@@ -8,8 +8,9 @@ const start = async () => {
 sequelize.sync()
   .then(() => {
     console.log("✅ Database updated Successfully!");
-    app.listen(3000, () => {
-      console.log("🚀 Server is running on port 5000");
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
     });
   })
   .catch((err) => {
