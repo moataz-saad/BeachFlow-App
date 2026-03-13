@@ -5,7 +5,8 @@ exports.toggleFavorite = async (req, res, next) => {
     try {
         const { beachId } = req.body;
         const userId = req.user.id;
-
+        console.log("DEBUG INFO -> User ID:", userId); // شفها في الـ Logs
+        console.log("DEBUG INFO -> Beach ID:", beachId);
         const existingFav = await Favorite.findOne({ where: { userId, beachId } });
 
         if (existingFav) {
