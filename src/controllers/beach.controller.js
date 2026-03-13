@@ -26,11 +26,15 @@ exports.getOne = async (req, res, next) => {
 // 3. إضافة شاطئ جديد (للأدمن)
 exports.addBeach = async (req, res, next) => {
     try {
-        const { name, location, price, description, imageUrl,maxCapacity } = req.body;
+        const { name, location, price, description, imageUrl,maxCapacity,hasChairs, chairPrice, hasUmbrellas, umbrellaPrice } = req.body;
         const newBeach = await Beach.create({
             name, location, price, description, imageUrl,maxCapacity,
             availableCapacity: maxCapacity,
-            adminId: req.user.id 
+            adminId: req.user.id ,
+            hasChairs: hasChairs === true || hasChairs === 'true',
+            chairPrice: chairPrice || 0,
+            hasUmbrellas: hasUmbrellas === true || hasUmbrellas === 'true',
+            umbrellaPrice: umbrellaPrice || 0
         });
 await Notification.create({
     title:'تم إضافة شاطئ جديد! 🏖️',
