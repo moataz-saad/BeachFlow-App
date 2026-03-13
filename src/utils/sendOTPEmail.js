@@ -10,16 +10,20 @@ const sendOTPEmail = async (email, otp) => {
       return; 
     }
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: userEmail,
-        pass: userPass.trim().replace(/\s/g, ""),
-      },
-      tls: {
-        rejectUnauthorized: false 
-      }
-    });
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: userEmail,
+    pass: userPass.trim().replace(/\s/g, ""),
+  },
+  tls: {
+    rejectUnauthorized: false 
+  },
+  family: 4 
+});
 
     const mailOptions = {
       from: `"Beach Flow" <${userEmail}>`,
