@@ -12,7 +12,7 @@ module.exports = sequelize.define("Beach", {
     allowNull: true},
   adminId: {
     type: DataTypes.INTEGER,
-    eferences: {
+    references: {
     model: 'Users',
     key: 'id',
     allowNull: true
