@@ -2,55 +2,33 @@ const nodemailer = require("nodemailer");
 
 const sendOTPEmail = async (email, otp) => {
   try {
-    const userEmail = process.env.EMAIL_USER;
-    const userPass = process.env.EMAIL_PASS;
-
-    if (!userEmail || !userPass) {
-      console.error("❌ ERROR: EMAIL_USER or EMAIL_PASS missing");
-      return; 
-    }
-
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false, // بورت 587 في بريفو لازم يكون false
       auth: {
-        user: userEmail,
-        pass: userPass.trim().replace(/\s/g, ""),
-      },
-      pool: true, 
-      maxConnections: 1,
-      family: 4,
-      tls: {
-        rejectUnauthorized: false
+        user: process.env.EMAIL_USER, // اللي هو الـ Login في الصورة
+        pass: process.env.EMAIL_PASS  // الـ SMTP Key اللي آخره f7DqFv
       }
     });
 
     const mailOptions = {
-      from: `"Beach Flow" <${userEmail}>`,
+      from: `"Beach Flow" <no-reply@beachflow.com>`, // ممكن تغير ده لأي اسم
       to: email,
-      subject: "Verification Code",
+      subject: "Verification Code - Beach Flow",
       html: `
-        <div style="font-family: sans-serif; text-align: center; padding: 20px;">
-          <h2>Welcome to Beach Flow</h2>
-          <p>Your code is: <b style="font-size: 24px; color: #007bff;">${otp}</b></p>
+        <div style="font-family: sans-serif; text-align: center; direction: rtl;">
+          <h2 style="color: #007bff;">أهلاً بك في Beach Flow</h2>
+          <p>كود التحقق الخاص بك هو:</p>
+          <h1 style="background: #f4f4f4; padding: 10px; display: inline-block;">${otp}</h1>
         </div>
-      `,
+      `
     };
 
-    // جرب نستخدم callback عشان نشوف الإيرور بوضوح لو حصل
-    return new Promise((resolve, reject) => {
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error("❌ Nodemailer Error Detail:", error.message);
-          reject(error);
-        } else {
-          console.log("✅ Email Sent: " + info.response);
-          resolve(info);
-        }
-      });
-    });
-
+    await transporter.sendMail(mailOptions);
+    console.log("✅ الإيميل اتبعت بنجاح عن طريق Brevo!");
   } catch (error) {
-    console.error("❌ Catch Block Error:", error.message);
+    console.error("❌ فشل إرسال الإيميل:", error.message);
   }
 };
 
