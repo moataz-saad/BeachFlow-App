@@ -50,3 +50,39 @@ exports.verifyOTP = async (req, res, next) => {
         res.json({ message: "تم تفعيل الحساب بنجاح" });
     } catch (err) { next(err); }
 };
+
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: "هذا البريد الإلكتروني غير مسجل لدينا" });
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    await user.save();
+    await sendOTPEmail(email, otp);
+    res.status(200).json({ message: "تم إرسال كود إعادة تعيين كلمة المرور إلى إيميلك" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "حدث خطأ أثناء إرسال الكود" });
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    const user = await User.findOne({ where: { email, otp } });
+    if (!user) {
+      return res.status(400).json({ message: "الكود غير صحيح أو الإيميل خطأ" });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.otp = null;
+    await user.save();
+    res.status(200).json({ message: "تم تغيير كلمة المرور بنجاح، يمكنك تسجيل الدخول الآن" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "حدث خطأ أثناء إعادة تعيين كلمة المرور" });
+  }
+};
