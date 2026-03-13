@@ -8,7 +8,7 @@ module.exports = sequelize.define("Beach", {
   price: { type: DataTypes.FLOAT },
   imageUrl: { type: DataTypes.STRING },
   description: {
-    type: DataTypes.TEXT, // أو STRING
+    type: DataTypes.TEXT,
     allowNull: true},
   adminId: {
     type: DataTypes.INTEGER,
@@ -20,7 +20,11 @@ module.exports = sequelize.define("Beach", {
 },maxCapacity: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 100 // أو أي رقم افتراضي
+    defaultValue: 100
 },
+hasChairs: { type: DataTypes.BOOLEAN, defaultValue: false },
+chairPrice: { type: DataTypes.FLOAT, defaultValue: 0 },
+hasUmbrellas: { type: DataTypes.BOOLEAN, defaultValue: false },
+umbrellaPrice: { type: DataTypes.FLOAT, defaultValue: 0 },
 });
 
