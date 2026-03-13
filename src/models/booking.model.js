@@ -8,7 +8,7 @@ const Booking = sequelize.define("Booking", {
     autoIncrement: true,
   },
   bookingDate: {
-    type: DataTypes.DATEONLY, // تاريخ فقط بدون وقت
+    type: DataTypes.DATEONLY, 
     allowNull: false,
   },
   status: {
@@ -21,6 +21,11 @@ const Booking = sequelize.define("Booking", {
   },
 }, {
   timestamps: true,
-});
+},
+chairsCount: { type: DataTypes.INTEGER, defaultValue: 0 },
+umbrellasCount: { type: DataTypes.INTEGER, defaultValue: 0 },
+totalPrice: { type: DataTypes.FLOAT, allowNull: false }
+);
+                                
 
 module.exports = Booking;
