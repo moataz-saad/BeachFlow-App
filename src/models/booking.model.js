@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
 
 
-module.exports = sequelize.define("Booking", {
+const Booking = sequelize.define("Booking", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   beachId: { type: DataTypes.INTEGER, allowNull: false },
   userId: { type: DataTypes.INTEGER, allowNull: false },
