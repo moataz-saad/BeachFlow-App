@@ -12,7 +12,20 @@ exports.register = async (req, res, next) => {
     const user = await User.create({ name, email, password: hashedPassword, otp });
     await sendOTPEmail(email, otp);
     res.status(201).json({ message: "تم التسجيل، تفقد إيميلك للكود" });
-  } catch (err) { next(err); }
+  }
+  catch (error) {    
+    if (error.name === 'SequelizeUniqueConstraintError') {
+        return res.status(400).json({
+            status: "fail",
+            message: "هذا البريد الإلكتروني مسجل لدينا بالفعل"
+        });
+    }
+    console.error(error);
+    res.status(500).json({
+        status: "error",
+        message: "حدث خطأ ما في السيرفر"
+    });
+}
 };
 
 exports.login = async (req, res, next) => {
