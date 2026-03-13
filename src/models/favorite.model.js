@@ -7,13 +7,15 @@ const Favorite = sequelize.define('Favorite', {
         primaryKey: true,
         autoIncrement: true
     },
-    userId: {
+userId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: 'userId' 
     },
     beachId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: 'beachId'
     }
     
 });
