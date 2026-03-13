@@ -11,30 +11,25 @@ const sendOTPEmail = async (email, otp) => {
     }
 
     const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: true,
-  auth: {
-    user: userEmail,
-    pass: userPass.replace(/\s/g, ""),
-  },
-  connectionTimeout: 10000, 
-  greetingTimeout: 5000,
-  socketTimeout: 10000,
-  dnsTimeout: 5000,
-  family: 4 
-});
+      service: "gmail",
+      auth: {
+        user: userEmail,
+        pass: userPass.trim().replace(/\s/g, ""),
+      },
+      tls: {
+        rejectUnauthorized: false 
+      }
+    });
 
     const mailOptions = {
       from: `"Beach Flow" <${userEmail}>`,
       to: email,
-      subject: "Verification Code",
-      text: `Your OTP is: ${otp}`,
+      subject: "Verification Code - Beach Flow",
       html: `
-        <div style="font-family: Arial, sans-serif; text-align: center;">
-          <h2>Welcome to Beach Flow</h2>
+        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; border: 1px solid #eee;">
+          <h2 style="color: #007bff;">Welcome to Beach Flow</h2>
           <p>Your verification code is:</p>
-          <h1 style="color: #007bff;">${otp}</h1>
+          <h1 style="background: #f8f9fa; display: inline-block; padding: 10px 20px; border-radius: 5px; letter-spacing: 2px;">${otp}</h1>
           <p>This code will expire shortly.</p>
         </div>
       `,
@@ -48,4 +43,3 @@ const sendOTPEmail = async (email, otp) => {
 };
 
 module.exports = sendOTPEmail;
-
