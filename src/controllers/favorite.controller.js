@@ -3,7 +3,7 @@ const { Favorite, Beach } = require('../models/index');
 
 exports.toggleFavorite = async (req, res, next) => {
     try {
-        const { beachId } = req.body;
+        const  beachId  = req.body;
         const userId = req.user.id;
         const existingFav = await Favorite.findOne({ where: { userId, beachId } });
 
