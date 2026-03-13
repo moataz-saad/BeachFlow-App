@@ -10,16 +10,15 @@ const sendOTPEmail = async (email, otp) => {
       return; 
     }
 
-    // الإعدادات دي هي الأنسب لبيئة Railway
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: userEmail,
-        pass: userPass.trim().replace(/\s/g, ""), // تنظيف الباسورد
+        pass: userPass.trim().replace(/\s/g, ""),
       },
-      // السطرين دول بيحلوا مشكلة الـ Timeout في أغلب سيرفرات Node.js
       pool: true, 
       maxConnections: 1,
+      family: 4,
       tls: {
         rejectUnauthorized: false
       }
