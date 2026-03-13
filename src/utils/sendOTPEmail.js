@@ -6,43 +6,52 @@ const sendOTPEmail = async (email, otp) => {
     const userPass = process.env.EMAIL_PASS;
 
     if (!userEmail || !userPass) {
-      console.error("❌ ERROR: EMAIL_USER or EMAIL_PASS is not defined in Railway Variables!");
+      console.error("❌ ERROR: EMAIL_USER or EMAIL_PASS missing");
       return; 
     }
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: userEmail,
-    pass: userPass.trim().replace(/\s/g, ""),
-  },
-  tls: {
-    rejectUnauthorized: false 
-  },
-  family: 4 
-});
+    // الإعدادات دي هي الأنسب لبيئة Railway
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: userEmail,
+        pass: userPass.trim().replace(/\s/g, ""), // تنظيف الباسورد
+      },
+      // السطرين دول بيحلوا مشكلة الـ Timeout في أغلب سيرفرات Node.js
+      pool: true, 
+      maxConnections: 1,
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
 
     const mailOptions = {
       from: `"Beach Flow" <${userEmail}>`,
       to: email,
-      subject: "Verification Code - Beach Flow",
+      subject: "Verification Code",
       html: `
-        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; border: 1px solid #eee;">
-          <h2 style="color: #007bff;">Welcome to Beach Flow</h2>
-          <p>Your verification code is:</p>
-          <h1 style="background: #f8f9fa; display: inline-block; padding: 10px 20px; border-radius: 5px; letter-spacing: 2px;">${otp}</h1>
-          <p>This code will expire shortly.</p>
+        <div style="font-family: sans-serif; text-align: center; padding: 20px;">
+          <h2>Welcome to Beach Flow</h2>
+          <p>Your code is: <b style="font-size: 24px; color: #007bff;">${otp}</b></p>
         </div>
       `,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Email Sent successfully: " + info.response);
+    // جرب نستخدم callback عشان نشوف الإيرور بوضوح لو حصل
+    return new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("❌ Nodemailer Error Detail:", error.message);
+          reject(error);
+        } else {
+          console.log("✅ Email Sent: " + info.response);
+          resolve(info);
+        }
+      });
+    });
+
   } catch (error) {
-    console.error("❌ Nodemailer Error Detail:", error.message);
+    console.error("❌ Catch Block Error:", error.message);
   }
 };
 
