@@ -5,7 +5,12 @@ exports.addReview = async (req, res, next) => {
     const { beachId, rating, comment } = req.body;
     const userId = req.user.id; 
     
-    await Review.create({ rating, comment, userId, beachId });
+    await Review.create({ 
+      rating, 
+      comment, 
+      UserId: userId,  
+      BeachId: beachId 
+    });
     const stats = await Review.findAll({
       where: { beachId },
       attributes: [
