@@ -3,6 +3,7 @@ const Beach = require('./beach.model');
 const Booking = require('./booking.model');
 const Favorite = require('./favorite.model');
 const Notification = require('./notification.model');
+const Review = require('./review.model');
 
 Booking.belongsTo(Beach, { foreignKey: 'beachId', as: 'beach' });
 Booking.belongsTo(User, { foreignKey: 'userId', as: 'user' });
