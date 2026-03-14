@@ -27,11 +27,9 @@ User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' });
 Notification.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 
-// الشاطئ الواحد ليه تقييمات كتير
 Beach.hasMany(Review, { foreignKey: 'beachId', as: 'reviews' });
 Review.belongsTo(Beach, { foreignKey: 'beachId' });
 
-// المستخدم الواحد يقدر يضيف تقييمات كتير
 User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
 Review.belongsTo(User, { foreignKey: 'userId' });
 
