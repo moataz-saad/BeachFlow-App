@@ -22,6 +22,10 @@ module.exports = sequelize.define("Beach", {
     allowNull: false,
     defaultValue: 100
 },
+  rating: {
+  type: DataTypes.FLOAT,
+  defaultValue: 0 
+},
 hasChairs: { type: DataTypes.BOOLEAN, defaultValue: false },
 chairPrice: { type: DataTypes.FLOAT, defaultValue: 0 },
 hasUmbrellas: { type: DataTypes.BOOLEAN, defaultValue: false },
