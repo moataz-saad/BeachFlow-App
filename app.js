@@ -14,4 +14,5 @@ app.use("/api/tickets", require("./src/routes/ticket.routes"));
 app.use('/api/favorites', require('./src/routes/favorite.routes'));
 app.use(require("./src/middleware/error.middleware"));
 app.use('/api/notifications', notificationRoutes);
+app.use("/api/reviews", require("./src/routes/review.routes"));
 module.exports = app;
