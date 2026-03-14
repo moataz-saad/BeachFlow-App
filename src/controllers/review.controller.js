@@ -1,4 +1,5 @@
-const { Review, Beach, sequelize } = require("../models");
+const { Review, Beach } = require("../models");
+const { sequelize } = require("../config/db"); 
 
 exports.addReview = async (req, res, next) => {
   try {
