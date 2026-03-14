@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db'); // تأكد إن المسار ده هو اللي شغال في user.model.js
+const { sequelize } = require('../config/db'); 
 
 const Notification = sequelize.define('Notification', {
     id: {
