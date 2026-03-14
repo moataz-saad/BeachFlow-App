@@ -33,4 +33,4 @@ Review.belongsTo(Beach, { foreignKey: 'beachId' });
 User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
 Review.belongsTo(User, { foreignKey: 'userId' });
 
-module.exports = {User,Beach,Booking,Notification,Favorite,Review,sequelize};
+module.exports = {User,Beach,Booking,Notification,Favorite,Review};
