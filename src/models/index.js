@@ -28,11 +28,11 @@ Notification.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 
 // الشاطئ الواحد ليه تقييمات كتير
-db.Beach.hasMany(db.Review, { foreignKey: 'beachId', as: 'reviews' });
-db.Review.belongsTo(db.Beach, { foreignKey: 'beachId' });
+Beach.hasMany(Review, { foreignKey: 'beachId', as: 'reviews' });
+Review.belongsTo(Beach, { foreignKey: 'beachId' });
 
 // المستخدم الواحد يقدر يضيف تقييمات كتير
-db.User.hasMany(db.Review, { foreignKey: 'userId', as: 'reviews' });
-db.Review.belongsTo(db.User, { foreignKey: 'userId' });
+User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
+Review.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = {User,Beach,Booking,Notification,Favorite,Review};
