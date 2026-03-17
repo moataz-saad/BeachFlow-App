@@ -23,7 +23,7 @@ exports.register = async (req, res, next) => {
     console.error(error);
     res.status(500).json({
         status: "error",
-        message: "حدث خطأ ما في السيرفر"
+        message: "حدث خطأ  في السيرفر"
     });
 }
 };
